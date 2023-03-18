@@ -8,6 +8,9 @@ use App\Http\Controllers\StudentController;
 
 // crud routes..
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\CustomAuthController;
+
+
 
 
 
@@ -41,6 +44,18 @@ Route::post('save-student',[MemberController::class,'Savestudent']);
 Route::get('edit-student/{id}',[MemberController::class,'EditStudent']);
 Route::post('update-student',[MemberController::class,'Updatestudent']);
 Route::get('delete-student/{id}',[MemberController::class,'DeleteStudent']);
+
+// login authentication system..
+Route::get('/login',[CustomAuthController::class,'login'])->middleware('alreadyloggedIn');
+Route::get('/registration',[CustomAuthController::class,'registration'])->middleware('alreadyloggedIn');
+Route::post('/register-user',[CustomAuthController::class,'RegisterUser'])->name('register-user');
+Route::post('/login-user',[CustomAuthController::class,'loginUser'])->name('login-user');
+Route::get('/dashboard',[CustomAuthController::class,'dashboard'])->middleware('IsLoggedIn');
+Route::get('/logout',[CustomAuthController::class,'logout']);
+
+
+
+
 
 
 

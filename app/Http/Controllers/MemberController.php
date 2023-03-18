@@ -11,7 +11,7 @@ class MemberController extends Controller
     // fetching the data
     public function index()
     {
-        $data= Member::get();
+        $data= Member::paginate(3);
         return view('student-list',compact('data'));
     }
     // adding the new user..
