@@ -10,6 +10,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\CustomAuthController;
 
+use App\Http\Controllers\EloquentController;
+
 
 
 
@@ -52,6 +54,19 @@ Route::post('/register-user',[CustomAuthController::class,'RegisterUser'])->name
 Route::post('/login-user',[CustomAuthController::class,'loginUser'])->name('login-user');
 Route::get('/dashboard',[CustomAuthController::class,'dashboard'])->middleware('IsLoggedIn');
 Route::get('/logout',[CustomAuthController::class,'logout']);
+Route::get('/search', [MemberController::class, 'search'])->name('search');
+
+//pdf generation..
+Route::get('/pdf', [MemberController::class, 'generatePDF']);
+
+// /eloquent model
+Route::get('/eloquent', [EloquentController::class, 'eloquent']);
+
+
+
+
+
+
 
 
 

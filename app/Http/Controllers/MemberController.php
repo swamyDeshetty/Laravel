@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Member;
+use PDF;
+
 
 class MemberController extends Controller
 {
@@ -11,7 +13,7 @@ class MemberController extends Controller
     // fetching the data
     public function index()
     {
-        $data= Member::paginate(3);
+        $data= Member::paginate(5);
         return view('student-list',compact('data'));
     }
     // adding the new user..
@@ -30,20 +32,20 @@ class MemberController extends Controller
 
         ]);
 
-        $firstname=$request->first_name;
+        $firstname=$request->first_name; //request method is used to get the submitted data ..
         $lastname=$request->last_name;
         $email=$request->email;
         $age=$request->age;
 
 
-        $Member= new Member();
-        $Member->first_name=$firstname;
+        $Member= new Member(); 
+        $Member->first_name=$firstname; // it is checking that submitted  inputs and database fields 
         $Member->last_name=$lastname;
         $Member->email=$email;
         $Member->age=$age;
 
         // it saves into the database
-        $Member->save();
+        $Member->save(); //if both are equal then it saves into the db..
 
         return redirect('index')->with('success', 'New User added successfully');
 
@@ -89,6 +91,26 @@ class MemberController extends Controller
         return redirect('index')->with('success','User Deleted succesfully');
 
     }
+    public function search(Request $request)
+    {
+    $query = $request->input('query');
+
+    $data = Member::where('first_name', 'LIKE', "%$query%")
+        ->orWhere('last_name', 'LIKE', "%$query%")
+        ->orWhere('email', 'LIKE', "%$query%")
+        ->orWhere('age', 'LIKE', "%$query%")
+        ->paginate(5);
+
+    return view('student-list', compact('data'));
+}
+
+public function generatePDF()
+{
+        $data=Member::all();
+        $pdf=PDF::loadview('student-list',compact('data'));
+        return $pdf->download('list.pdf');
+}
+
 
 
 }
